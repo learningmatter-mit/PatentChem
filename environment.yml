@@ -1,0 +1,13 @@
+name: patents
+channels:
+  - conda-forge
+  - rdkit
+  - defaults
+dependencies:
+  - rdkit
+  - bs4
+  - yaml
+  - python=3.9
+  - tqdm
+  - pip:
+    - pyyaml
