@@ -1,4 +1,8 @@
 # PatentChem
+[//]: # (Badges)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/612404368.svg)](https://zenodo.org/badge/latestdoi/612404368)
+
 
 This code downloads the weekly bulk files from the [USPTO](https://developer.uspto.gov/product/patent-grant-dataxml), selects the patents relevant to chemistry, and queries the chemistry patent claims sections for given keywords to find molecule SMILES related to those keywords.
 
