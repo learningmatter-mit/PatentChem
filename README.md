@@ -85,13 +85,13 @@ The following file sizes are taken from the [USPTO Bulk Data Storage System](htt
 * For simplicity, `clean.py` replaces "*" and "Y" substituents from Markush structures with ethyl and O groups. This might not be appropriate for your applications.
 
 ## Citation
-If you use this code, please cite the following [manuscript]():  <!-- # TODO: fill in link and rest of bibtex citation -->
+If you use this code, please cite the following [manuscript](https://arxiv.org/abs/2303.08272):
 ```
 @article{patents-generative2023,
   title={Automated patent extraction powers generative modeling in focused chemical spaces},
   author={Subramanian, Akshay and Greenman, Kevin P. and Gervaix, Alexis and Yang, Tzuhsiung and G{\'{o}}mez-Bombarelli, Rafael},
-  journal={TBD},
-  doi={TBD},
+  journal = {arXiv preprint arXiv:2303.08272},
+  doi = {10.48550/ARXIV.2303.08272},
   year={2023}
 }
 ```
