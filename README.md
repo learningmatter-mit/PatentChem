@@ -8,6 +8,10 @@ This code downloads the weekly bulk files from the [USPTO](https://developer.usp
 
 ## Installation
 ```
+conda env create -f environment.yml
+```
+Alternatively, the following may be faster:
+```
 conda install -c conda-forge mamba
 mamba env create -f environment.yml
 ```
