@@ -94,6 +94,11 @@ def get_parser():
         help="Use if you want to redownload files that already exist",
     )
     parser.add_argument(
+        "--no_uncompress",
+        action="store_true",
+        help="Use if you want to skip the untar/unzip step",
+    )
+    parser.add_argument(
         "--remove_compressed",
         action="store_true",
         help="Use if you want to remove the original .tar and .zip files for the weekly releases",
@@ -141,20 +146,25 @@ def main(args):
                 )
 
             # Once downloaded, untar/unzip in the corresponding directory and remove the original tar/zip file
-            if link[0].endswith(".tar"):
-                tar = tarfile.open(name=year_link, mode="r")
-                tar.extractall(target_dir)
-                tar.close()
-            elif link[0].lower().endswith(".zip"):
-                with ZipFile(year_link, "r") as zf:
-                    zf.extractall(path=target_dir)
+            if not args.no_uncompress:
+                if link[0].endswith(".tar"):
+                    tar = tarfile.open(name=year_link, mode="r")
+                    tar.extractall(target_dir)
+                    tar.close()
+                elif link[0].lower().endswith(".zip"):
+                    with ZipFile(year_link, "r") as zf:
+                        zf.extractall(path=target_dir)
 
-            if args.remove_compressed:
-                os.remove(year_link)
+                if args.remove_compressed:
+                    os.remove(year_link)
 
     return
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
+    if args.no_uncompress and args.remove_compressed:
+        raise ValueError(
+            "You cannot use the options '--no_uncompress' and '--remove_compressed' at the same time. This would remove the files immediately after downloading them."
+        )
     main(args)
