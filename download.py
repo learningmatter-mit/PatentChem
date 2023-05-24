@@ -131,9 +131,6 @@ def main(args):
             year_link = os.path.join(patent_year, link[0])
             target_dir = year_link[:-4]
 
-            # Create target directory to untar/unzip the files
-            create_directory(target_dir)
-
             # Start downloading
             if not os.path.isfile(year_link) or args.force_redownload:
                 download_url(
@@ -147,6 +144,9 @@ def main(args):
 
             # Once downloaded, untar/unzip in the corresponding directory and remove the original tar/zip file
             if not args.no_uncompress:
+                # Create target directory to untar/unzip the files
+                create_directory(target_dir)
+
                 if link[0].endswith(".tar"):
                     tar = tarfile.open(name=year_link, mode="r")
                     tar.extractall(target_dir)
