@@ -71,7 +71,7 @@ def patent_directory(patent_year, patent_link, data_dir):
         subdirectory = [
             s for s in subdirectory if ".txt" not in s
         ]  # don't consider any present .txt files
-        subdirectory_zip = [s for s in subdirectory if ".zip" in s]
+        # subdirectory_zip = [s for s in subdirectory if ".zip" in s]
 
         for item in subdirectory:
             subdirectory_zip = os.listdir(os.path.join(current_path, item))
@@ -88,7 +88,7 @@ def patent_directory(patent_year, patent_link, data_dir):
 def patent_unzipper(list_path, list_zip, remove_compressed, data_dir):
     # Recording of the patent names related with chemistry in a txt file
     chemistry_patent_list = []
-    chemistry_mol_list = []
+    molfile_list = []
     mol_list = []
     # count = 0
 
@@ -141,7 +141,7 @@ def patent_unzipper(list_path, list_zip, remove_compressed, data_dir):
                 # Record the path
                 current_name = patent_ + element
                 current_name = current_name.replace(data_dir, "")
-                chemistry_mol_list.append(current_name)
+                molfile_list.append(current_name)
                 # Intermediate state, extract the molecule from the .MOL
                 mol_list.append(Chem.MolFromMolFile(patent_ + element))
 
@@ -149,7 +149,7 @@ def patent_unzipper(list_path, list_zip, remove_compressed, data_dir):
             elif element.lower().endswith(".tif"):  # Remove .TIF
                 os.remove(patent_ + element)  # Comment this elif to preserve .TIF files
     print("Step 3 Complete")
-    return chemistry_patent_list, chemistry_mol_list, mol_list
+    return chemistry_patent_list, molfile_list, mol_list
 
 
 """
@@ -162,14 +162,14 @@ that result from these variables
 """
 
 
-def patent_smile(chemistry_patent_list, chemistry_mol_list, mol_list, data_dir):
+def patent_smile(chemistry_patent_list, molfile_list, mol_list, data_dir):
     # 3) Differentiation between normal molecules and special cases:
     # Special case => Failure of the extraction, may contain R or other special element.
     # Two layers of specificity were determined: with / without RDKit sanitization in Chem.MolFromMolFile
     print("Beginning Step 4: SMILES writing")
 
-    chemistry_mol_special_list = []
-    chemistry_mol_normal_list = []
+    molfile_special_list = []
+    molfile_normal_list = []
     # smile_list = []
     smile_normal_list = []
     mol_normal_list = []
@@ -179,14 +179,14 @@ def patent_smile(chemistry_patent_list, chemistry_mol_list, mol_list, data_dir):
     for index in range(len(mol_list)):
         if mol_list[index] is None:
             mol_special_list.append(Chem.MolFromMolFile(mol_list[index], sanitize=False))
-            current_name = chemistry_mol_list[index]
+            current_name = molfile_list[index]
             current_name = current_name.replace(data_dir, "")
-            chemistry_mol_special_list.append(current_name)
+            molfile_special_list.append(current_name)
         else:
             mol_normal_list.append(mol_list[index])
-            current_name = chemistry_mol_list[index]
+            current_name = molfile_list[index]
             current_name = current_name.replace(data_dir, "")
-            chemistry_mol_normal_list.append(current_name)
+            molfile_normal_list.append(current_name)
 
             # 2.4) Transform .MOL into SMILE and write the corresponding .txt file /
             # The index is related to the chemical_mol_list, which gives the path
@@ -197,17 +197,16 @@ def patent_smile(chemistry_patent_list, chemistry_mol_list, mol_list, data_dir):
                 smile = " "
 
             smile_normal_list.append(smile)
-            smile_file = open(chemistry_mol_list[index][:-4] + ".txt", "w")
-            smile_file.write(smile)
-            smile_file.close()
+            with open(molfile_list[index][:-4] + ".txt", "w") as smile_file:
+                smile_file.write(smile)
 
     # Location of fail
     # mol_fail_location = [i for i,x in enumerate(mol_list) if x == None]
 
     print("Step 4 Complete")
     return (
-        chemistry_mol_special_list,
-        chemistry_mol_normal_list,
+        molfile_special_list,
+        molfile_normal_list,
         mol_normal_list,
         mol_special_list,
         smile_normal_list,
@@ -266,7 +265,7 @@ def main(args):
         print("len(list_zip):", len(list_zip))
 
         # Unzipping
-        chemistry_patent_list, chemistry_mol_list, mol_list = patent_unzipper(
+        chemistry_patent_list, molfile_list, mol_list = patent_unzipper(
             list_path, list_zip, args.remove_compressed, args.data_dir
         )
 
@@ -278,32 +277,31 @@ def main(args):
             pickle.dump(chemistry_patent_list, file_chemistry_patent_list)
         print("len(chemistry_patent_list):", len(chemistry_patent_list))
 
-        with open("chemistry_mol_list_" + patent_year, "wb") as file_mol_patent_list:
-            pickle.dump(chemistry_mol_list, file_mol_patent_list)
-        print("len(chemistry_mol_list):", len(chemistry_mol_list))
+        with open("molfile_list_" + patent_year, "wb") as file_mol_patent_list:
+            pickle.dump(molfile_list, file_mol_patent_list)
+        print("len(molfile_list):", len(molfile_list))
 
         # SMILE writing
         print("len(chemistry_patent_list):", len(chemistry_patent_list))
-        print("len(chemistry_mol_list):", len(chemistry_mol_list))
         print("len(mol_list):", len(mol_list))
 
         (
-            chemistry_mol_special_list,
-            chemistry_mol_normal_list,
+            molfile_special_list,
+            molfile_normal_list,
             mol_normal_list,
             mol_special_list,
             smile_normal_list,
             bugcounter,
-        ) = patent_smile(chemistry_patent_list, chemistry_mol_list, mol_list, args.data_dir)
+        ) = patent_smile(chemistry_patent_list, molfile_list, mol_list, args.data_dir)
 
         # To record the lists into a file
-        with open("path_mol_special_list_" + patent_year, "wb") as file_chemistry_mol_special_list:
-            pickle.dump(chemistry_mol_special_list, file_chemistry_mol_special_list)
-        print("len(chemistry_mol_special_list):", len(chemistry_mol_special_list))
+        with open("path_mol_special_list_" + patent_year, "wb") as file_molfile_special_list:
+            pickle.dump(molfile_special_list, file_molfile_special_list)
+        print("len(molfile_special_list):", len(molfile_special_list))
 
-        with open("path_mol_normal_list_" + patent_year, "wb") as file_chemistry_mol_normal_list:
-            pickle.dump(chemistry_mol_normal_list, file_chemistry_mol_normal_list)
-        print("len(chemistry_mol_normal_list):", len(chemistry_mol_normal_list))
+        with open("path_mol_normal_list_" + patent_year, "wb") as file_molfile_normal_list:
+            pickle.dump(molfile_normal_list, file_molfile_normal_list)
+        print("len(molfile_normal_list):", len(molfile_normal_list))
 
         with open("mol_normal_list_" + patent_year, "wb") as file_mol_normal_list:
             pickle.dump(mol_normal_list, file_mol_normal_list)
