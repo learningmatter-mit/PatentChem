@@ -46,11 +46,6 @@ def parsingXML(
     subject_list,
     data_dir,
     chemical_patent_list,
-    smile_normal_list,
-    path_mol_normal_list,
-    path_mol_special_list,
-    mol_special_list,
-    patent_year,
 ):
     print("Subject list:", subject_list)
     # Parsing the XML file containing the claim of the patent
