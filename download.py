@@ -138,6 +138,7 @@ def main(args):
                     year_link,
                 )
             else:
+                # TODO: Add `--force_download_most_recent` for cases where download was interrupted in the middle of a file
                 print(
                     f"File {year_link} already exists. Use option '--force_redownload' if you want to download anyway."
                 )
