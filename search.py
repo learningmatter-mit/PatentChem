@@ -260,11 +260,6 @@ def main(args):
                 args.subject_list,
                 args.data_dir,
                 chemical_patent_list,
-                smile_normal_list,
-                path_mol_normal_list,
-                path_mol_special_list,
-                mol_special_list,
-                patent_year,
             )
             print("index_list:", index_list)
             # Writing of the dictionary
