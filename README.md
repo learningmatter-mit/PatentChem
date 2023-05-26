@@ -26,6 +26,8 @@ Download all USPTO patents for the given years:
 `python download.py --years 2021 --data_dir /data/patents_data/`
 
 Additional options:
+* `--force_redownload`: download files even if they already exist
+* `--no_uncompress`: do not uncompress the `*.zip` and `*.tar` files after selecting the chemistry-related ones (to save space if downloading all years at once)
 * `--remove_compressed`: remove the original .tar and .zip files for the weekly releases after decompressing them
 
 ### 2. Select
@@ -34,7 +36,6 @@ Select the patents related to chemistry based on the presence of CDX files:
 `python select_chem.py --years 2021 --data_dir /data/patents_data/`
 
 Additional options:
-* `--no_uncompress`: do not uncompress the `*.zip` and `*.tar` files after selecting the chemistry-related ones (to save space if downloading all years at once)
 * `--remove_compressed`: remove all original `*.zip` and `*.tar` files after unzipping those relevant to chemistry
 
 ### 3. Search
@@ -53,6 +54,12 @@ Additional options:
 * `--neutral_only`: include only neutral molecules in output
 * `--mw_min`: include only molecules with molecular weight greater than this
 * `--mw_max`: include only molecules with molecular weight less than this
+
+### Other Useful Commands
+* If you ran `download.py` with `--no_uncompress` and now want to uncompress the files: `python utils/unzip.py --years 2021 --data_dir /data/patents_data/`
+* If you've run `select_chem.py` but want to reset the data directory to its state after downloading (with unzipped files): `python utils/reset.py --years 2021 --data_dir /data/patents_data/`
+  * This assumes you didn't use `--remove_compressed` with `download.py`. If you used `--remove_compressed`, you'll have to redo the `download.py` step.
+  * Add `--remove_uncompressed_only` if you want to reset to a state after downloading with `--no_uncompress` (all files other than the original tar/zip files will be deleted)
 
 ## Download File Sizes
 
