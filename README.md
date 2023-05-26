@@ -56,7 +56,7 @@ Additional options:
 
 ## Download File Sizes
 
-The following file sizes are taken from the [USPTO Bulk Data Storage System](https://bulkdata.uspto.gov) using the URLs `https://bulkdata.uspto.gov/data/patent/grant/redbook/<YEAR>/` and converting from bytes to GB. The 2023 file size is as of 10 March 2023. The download speed seems to be restricted to ~5-10MB/s, which means downloading the full set could require > 4 days if done in series. Alternatively, you can run multiple downloads in parallel. Either way, we recommend starting the downloads in a [tmux](https://github.com/tmux/tmux/wiki) session to run in the background. Note that these file sizes are for the *compressed* (zip or tar) files, so the total space required to store this data is larger than what is reported below. Use caution to avoid filling your hard drive to capacity.
+The following file sizes are taken from the [USPTO Bulk Data Storage System](https://bulkdata.uspto.gov) using the URLs `https://bulkdata.uspto.gov/data/patent/grant/redbook/<YEAR>/` and converting from bytes to GB. The 2023 file size is as of 23 May 2023. The download speed seems to be restricted to ~5-10MB/s, which means downloading the full set could require > 4 days if done in series. Alternatively, you can run multiple downloads in parallel. Either way, we recommend starting the downloads in a [tmux](https://github.com/tmux/tmux/wiki) session to run in the background. Note that these file sizes are for the *compressed* (zip or tar) files, so the total space required to store this data is larger than what is reported below. Use caution to avoid filling your hard drive to capacity.
 
 | **Year**  | **File Size** | **Units** |
 |-------|-----------|-------|
@@ -81,9 +81,9 @@ The following file sizes are taken from the [USPTO Bulk Data Storage System](htt
 | 2019  | 182.28    | GB    |
 | 2020  | 192.45    | GB    |
 | 2021  | 184.41    | GB    |
-| 2022  | 185       | GB    |
-| 2023  | 39        | GB    |
-| **Total** | **2.05**      | **TB**    |
+| 2022  | 184.1     | GB    |
+| 2023  | 80.3+     | GB    |
+| **Total** | **2.1**      | **TB**    |
 
 ## Notes
 * Patent archives from 2001 - 2004 and 2009 follow a different format than other years; this code may not be able to process patents from these years properly.
