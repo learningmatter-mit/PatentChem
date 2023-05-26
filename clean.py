@@ -117,7 +117,7 @@ def cleaning_molecules_from_subst(df_molecules):
     print("Sanitizing molecules, checking for invalid molecules...")
     df_clean["smiles"] = df_clean["smiles"].apply(lambda x: sanitize_smiles(x))
     print(f"Removing {df_clean.smiles.isna().sum()} invalid molecules...")
-    df_clean.dropna(inplace=True)
+    df_clean.dropna(subset=["smiles"], inplace=True)
     print("Done.")
 
     # Collect all the patents into a single column
