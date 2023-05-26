@@ -249,6 +249,7 @@ def main(args):
 
     # Write SMILES list to file
     clean_smiles_set = set(df_cleaned_smiles_patents.smiles)
+    print(f"Writing {len(clean_smiles_set)} unique SMILES to file...")
     smiles_txt_file = os.path.join(args.output_dir, args.naming, f"smiles_list_{args.naming}.txt")
     with open(smiles_txt_file, "w") as f:
         for i, smi in enumerate(clean_smiles_set):
