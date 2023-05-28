@@ -35,6 +35,11 @@ def get_parser():
         action="store_true",
         help="Use if you want to remove all uncompressed files but not uncompress the zip/tar files again",
     )
+    parser.add_argument(
+        "--remove_compressed",
+        action="store_true",
+        help="Use if you want to remove the original .tar and .zip files for the weekly releases",
+    )
     return parser
 
 
@@ -69,6 +74,9 @@ def main(args):
                 elif file.lower().endswith(".zip"):
                     with ZipFile(file, "r") as zf:
                         zf.extractall(path=target_dir)
+
+                if args.remove_compressed:
+                    os.remove(file)
     return
 
 
