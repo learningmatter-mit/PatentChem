@@ -56,57 +56,110 @@ def parsingXML(
 
         patent_ = os.path.join(data_dir, patent)
 
+        year = int(patent[:4])
+
+        # 2001-2004 have different XML structure with weird characters that are hard to escape, so treat as text
+        if year < 2005:
+            early_year = True
+        else:
+            early_year = False
+
+        # 2001 uses SGM instead of XML
+        if year == 2001:
+            xml_file = patent_ + patent_[-20:-1] + ".SGM"
+        else:
+            xml_file = patent_ + patent_[-20:-1] + ".XML"
+
         try:
-            try:
-                claim = ET.ElementTree(file=patent_ + patent_[-20:-1] + ".XML")
-            except FileNotFoundError as e:
-                print(e)
-                pass
-        except ET.ParseError:
-            print(f"Failed with ET.ParseError on {patent_}")
+            claim = ET.ElementTree(file=xml_file)
+        except FileNotFoundError as e:
+            print(e)
             continue
-
-        # For looking into only the abstract
-        abstract_xml = claim.find("abstract")
-        abstract_text = ET.tostring(abstract_xml, method="text").decode("utf-8")
-
-        match = 0
-        for subject in subject_list:
-            if subject in abstract_text:
-                match += 1
-
-        # Build a list (xml_text) with the text contained in the title and bulk text of the xml file.
-        xml_text = []
-        for tag_list in ["invention-title", "p"]:
-            for elem in claim.iter(tag=tag_list):
-                xml_text.append(elem.text)
-
-        # Check for words matching the target (subject_list)
-        for text in xml_text:
-            if text is not None:
-                for subject in subject_list:
-                    if subject in text:
-                        match += 1
-
-        if match > 1:  # If match, add the index of the patent to the list (index_list)
-            counter += 1
-            # Get the patent code
-            for elem in claim.iter(tag="country"):
-                country = elem.text
-                break  # The right one is on the first iteration
-            for elem in claim.iter(tag="doc-number"):
-                docnumber = elem.text
-                break
-            for elem in claim.iter(tag="kind"):
-                kind = elem.text
-                break
-            if docnumber.startswith(
-                "0"
-            ):  # Again, consistency! docnumber = 09862000 => patent code = US9862000B2
-                patent_code = country + docnumber[1:] + kind
+        except ET.ParseError:
+            if early_year:
+                pass
             else:
-                patent_code = country + docnumber + kind
+                print(f"Failed with ET.ParseError on {patent_}")
+                continue
 
+        if early_year:
+            with open(xml_file, "r") as f:
+                patent_text = f.read()
+
+            # search through whole XML as one piece of text for years 2002-2004
+            match = 0
+            for subject in subject_list:
+                if subject in patent_text:
+                    match += 1
+
+            if match > 0:
+                counter += 1
+                # patent_code = patent.split("/")[-2].split("-")[0]
+                # find the text between PDAT and /PDAT in patent_text
+
+                country_start = patent_text.find("<B190><PDAT>")
+                country_end = patent_text.find("</PDAT></B190>")
+                country = patent_text[country_start + 12 : country_end]
+
+                docnumber_start = patent_text.find("<B110><DNUM><PDAT>")
+                docnumber_end = patent_text.find("</PDAT></DNUM></B110>")
+                docnumber = patent_text[docnumber_start + 18 : docnumber_end]
+
+                kind_start = patent_text.find("<B130><PDAT>")
+                kind_end = patent_text.find("</PDAT></B130>")
+                kind = patent_text[kind_start + 12 : kind_end]
+
+                # docnumber = 09862000 => patent code = US9862000B2
+                if docnumber.startswith("0"):
+                    patent_code = country + docnumber[1:] + kind
+                elif docnumber.startswith("RE0"):
+                    patent_code = country + "RE" + docnumber[3:] + kind
+                else:
+                    patent_code = country + docnumber + kind
+
+        else:
+            # For looking into only the abstract
+            abstract_xml = claim.find("abstract")
+            abstract_text = ET.tostring(abstract_xml, method="text").decode("utf-8")
+
+            match = 0
+            for subject in subject_list:
+                if subject in abstract_text:
+                    match += 1
+
+            # Build a list (xml_text) with the text contained in the title and bulk text of the xml file.
+            xml_text = []
+            for tag_list in ["invention-title", "p"]:
+                for elem in claim.iter(tag=tag_list):
+                    xml_text.append(elem.text)
+
+            # Check for words matching the target (subject_list)
+            for text in xml_text:
+                if text is not None:
+                    for subject in subject_list:
+                        if subject in text:
+                            match += 1
+
+            if match > 0:
+                counter += 1
+                # Get the patent code
+                for elem in claim.iter(tag="country"):
+                    country = elem.text
+                    break  # The right one is on the first iteration
+                for elem in claim.iter(tag="doc-number"):
+                    docnumber = elem.text
+                    break
+                for elem in claim.iter(tag="kind"):
+                    kind = elem.text
+                    break
+                if docnumber.startswith(
+                    "0"
+                ):  # Again, consistency! docnumber = 09862000 => patent code = US9862000B2
+                    patent_code = country + docnumber[1:] + kind
+                else:
+                    patent_code = country + docnumber + kind
+
+        if match > 0:  # If match, add the index of the patent to the list (index_list)
             # Index list
             try:
                 index_list.append(chemical_patent_list.index(patent))
