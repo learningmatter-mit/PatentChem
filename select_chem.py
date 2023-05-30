@@ -33,7 +33,7 @@ def patent_directory(patent_year, patent_link, data_dir):
                     link_link_ice_dir,
                     link,
                 )
-            ):  # remove unnecessary directories in 2008-2010
+            ):  # remove unnecessary directories in late 2008 - early 2010
                 shutil.move(
                     os.path.join(
                         link_link_ice_dir,
@@ -43,14 +43,14 @@ def patent_directory(patent_year, patent_link, data_dir):
                     os.path.join(link_dir, link, dir),
                 )
             shutil.rmtree(os.path.join(link_dir, link, "project"))
-            current_path = link_dir
+            current_path = os.path.join(link_dir, link)
         elif os.path.isdir(link_ice_dir):
             for dir in os.listdir(
                 os.path.join(
                     link_ice_dir,
                     link,
                 )
-            ):  # remove unnecessary directories in 2008-2010
+            ):  # remove unnecessary directories in late 2008 - early 2010
                 shutil.move(
                     os.path.join(
                         link_ice_dir,
@@ -60,7 +60,7 @@ def patent_directory(patent_year, patent_link, data_dir):
                     os.path.join(link_dir, link, dir),
                 )
             shutil.rmtree(os.path.join(link_dir, "project"))
-            current_path = link_dir
+            current_path = os.path.join(link_dir, link)
         elif link == "I20201006_ST26_Sample":  # edge case
             current_path = os.path.join(data_dir, patent_year, link, "20201006")
         else:
