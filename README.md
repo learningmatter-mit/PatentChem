@@ -93,8 +93,8 @@ The following file sizes are taken from the [USPTO Bulk Data Storage System](htt
 | **Total** | **2.1**      | **TB**    |
 
 ## Notes
-* Patent archives from 2001 - 2004 and 2009 follow a different format than other years; this code may not be able to process patents from these years properly.
 * For simplicity, `clean.py` replaces "*" and "Y" substituents from Markush structures with ethyl and O groups. This might not be appropriate for your applications.
+<!-- TODO: is the above relevant? -->
 
 ## Citation
 If you use this code, please cite the following [manuscript](https://arxiv.org/abs/2303.08272):

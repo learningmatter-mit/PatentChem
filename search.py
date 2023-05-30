@@ -279,8 +279,7 @@ def main(args):
 
     if args.years == ["all"]:
         print("Preparing to search chemistry patents from 2005 to 2023...")
-        years = list(map(str, range(2005, 2023)))
-        # TODO: doesn't currently work for 2001-2004 because of different XML structure
+        list(map(str, range(2001, 2024)))
     else:
         print("Preparing to search chemistry patents from", ", ".join(args.years), "...")
         years = args.years
