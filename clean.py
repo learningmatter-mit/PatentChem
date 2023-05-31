@@ -103,6 +103,20 @@ def cleaning_molecules_from_subst(df_molecules):
     """
     # Manually changing syntax of smiles molecules to ethylene groups using regex
     df_clean = df_molecules.copy()
+
+    num_mols_w_Y = sum(df_clean.smiles.str.count("Y") > 0)
+    num_mols_w_R = sum(df_clean.smiles.str.count(r"Y|\*") > 0)
+    total_num_special_mols = sum(df_clean.smiles.str.count(r"Y|\*") > 0)
+    num_normal_mols = df_clean.shape[0] - total_num_special_mols
+
+    print(f"Found {num_mols_w_Y} molecules with 'Y' substituents.")
+    print(f"Found {num_mols_w_R} molecules with '*' substituents.")
+    print(f"Found {total_num_special_mols} molecules with 'Y' or '*' substituents.")
+    print(f"Found {num_normal_mols} molecules without 'Y' or '*' substituents.")
+    print(
+        f"Percent of molecules with 'Y' or '*' substituents: {total_num_special_mols / df_clean.shape[0]}"
+    )
+
     print('Substituting "*" and "Y" substituents with ethyl and O groups.')
     df_clean.smiles = df_clean.smiles.str.replace(r"\[\d+\*\]", "CC")
     df_clean.smiles = df_clean.smiles.str.replace(r"(\d\d\*\+)", "CC+")
@@ -199,10 +213,10 @@ def get_parser():
 def main(args):
 
     if args.years == ["all"]:
-        print("Preparing to search chemistry patents from 2005 to 2023...")
+        print("Preparing to clean chemistry patents from 2001 to 2023...")
         years = list(map(str, range(2001, 2024)))
     else:
-        print("Preparing to search chemistry patents from", ", ".join(args.years), "...")
+        print("Preparing to clean chemistry patents from", ", ".join(args.years), "...")
         years = args.years
 
     subject_smiles_dictionary_abstract = creating_single_molecule_directory(

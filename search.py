@@ -278,7 +278,7 @@ def main(args):
     directory_creation(os.path.join(args.output_dir, args.naming))
 
     if args.years == ["all"]:
-        print("Preparing to search chemistry patents from 2005 to 2023...")
+        print("Preparing to search chemistry patents from 2001 to 2023...")
         list(map(str, range(2001, 2024)))
     else:
         print("Preparing to search chemistry patents from", ", ".join(args.years), "...")
