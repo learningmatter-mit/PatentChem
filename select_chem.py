@@ -73,6 +73,7 @@ def patent_directory(patent_year, patent_link, data_dir):
         ]  # don't consider any present .txt files
         # subdirectory_zip = [s for s in subdirectory if ".zip" in s]
 
+        # TODO: also add ZIP files from *-SUPP directories from late 2010 onwards
         for item in subdirectory:
             subdirectory_zip = os.listdir(os.path.join(current_path, item))
             for element_zip in subdirectory_zip:
