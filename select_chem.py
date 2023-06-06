@@ -71,14 +71,28 @@ def patent_directory(patent_year, patent_link, data_dir):
         subdirectory = [
             s for s in subdirectory if ".txt" not in s
         ]  # don't consider any present .txt files
-        # subdirectory_zip = [s for s in subdirectory if ".zip" in s]
 
-        # TODO: also add ZIP files from *-SUPP directories from late 2010 onwards
         for item in subdirectory:
             subdirectory_zip = os.listdir(os.path.join(current_path, item))
             for element_zip in subdirectory_zip:
                 if element_zip.lower().endswith(".zip"):
                     list_zip.append(os.path.join(current_path, item, element_zip))
+
+        # There are also ZIP files in *-SUPP directories from late 2010 onwards
+        if int(patent_year) >= 2010:
+            if os.path.isdir(os.path.join(current_path + "-SUPP")):
+                current_path = os.path.join(current_path + "-SUPP")
+                list_path.append(current_path)
+                subdirectory = os.listdir(current_path)
+                subdirectory = [
+                    s for s in subdirectory if ".txt" not in s
+                ]  # don't consider any present .txt files
+
+                for item in subdirectory:
+                    subdirectory_zip = os.listdir(os.path.join(current_path, item))
+                    for element_zip in subdirectory_zip:
+                        if element_zip.lower().endswith(".zip"):
+                            list_zip.append(os.path.join(current_path, item, element_zip))
 
     print("Step 1 Complete")
 
