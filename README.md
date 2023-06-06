@@ -19,11 +19,15 @@ mamba env create -f environment.yml
 ## Example Usage
 The scripts should be run in the following order. Steps 1 and 2 only need to be run once, then steps 3 and 4 can be run as many times as desired using different query terms.
 
+Alternatively, we have made a file available on [Zenodo](https://zenodo.org/record/7992427) with the results of steps 1-2. This file can be downloaded and used as input to steps 3-4 to avoid having to run steps 1-2. We've created a script to download and unzip this file: `download_from_zenodo.sh`. This download (~75GB) is slow even if you have a fast connection (may take 1-2+ hours due to Zenodo limitations). However, this may still be faster than downloading everything from USPTO. We also recommend this option if you don't have enough hard disk space to store the full dataset in step 1 (see [Download File Sizes](#download-file-sizes)).
+
 
 ### 1. Download
 Download all USPTO patents for the given years: 
 
 `python download.py --years 2021 --data_dir /data/patents_data/`
+
+The download speed seems to be restricted to ~5-10MB/s by USPTO, which means downloading the full set could require > 4 days if done in series. Alternatively, you can run multiple downloads in parallel. Either way, we recommend starting the downloads in a [tmux](https://github.com/tmux/tmux/wiki) session to run in the background. For example, you might consider starting several tmux sessions to do the download in parallel using a script similar to `download_tmux.sh`. Please see [Download File Sizes](#download-file-sizes) for the approximate size of the files to be downloaded and use caution to avoid filling your whole hard drive.
 
 Additional options:
 * `--force_redownload`: download files even if they already exist
@@ -63,7 +67,7 @@ Additional options:
 
 ## Download File Sizes
 
-The following file sizes are taken from the [USPTO Bulk Data Storage System](https://bulkdata.uspto.gov) using the URLs `https://bulkdata.uspto.gov/data/patent/grant/redbook/<YEAR>/` and converting from bytes to GB. The 2023 file size is as of 23 May 2023. The download speed seems to be restricted to ~5-10MB/s, which means downloading the full set could require > 4 days if done in series. Alternatively, you can run multiple downloads in parallel. Either way, we recommend starting the downloads in a [tmux](https://github.com/tmux/tmux/wiki) session to run in the background. Note that these file sizes are for the *compressed* (zip or tar) files, so the total space required to store this data is larger than what is reported below. Use caution to avoid filling your hard drive to capacity.
+The following file sizes are taken from the [USPTO Bulk Data Storage System](https://bulkdata.uspto.gov) using the URLs `https://bulkdata.uspto.gov/data/patent/grant/redbook/<YEAR>/` and converting from bytes to GB. The 2023 file size is as of 23 May 2023. Note that these file sizes are for the *compressed* (zip or tar) files, so the total space required to store this data is larger than what is reported below. Use caution to avoid filling your hard drive to capacity.
 
 | **Year**  | **File Size** | **Units** |
 |-------|-----------|-------|
