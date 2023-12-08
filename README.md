@@ -101,13 +101,18 @@ The following file sizes are taken from the [USPTO Bulk Data Storage System](htt
 <!-- TODO: is the above relevant? -->
 
 ## Citation
-If you use this code, please cite the following [manuscript](https://arxiv.org/abs/2303.08272):
+If you use this code, please cite the following [manuscript](https://doi.org/10.1039/D3DD00041A) ([preprint](https://arxiv.org/abs/2303.08272) also available):
 ```
-@article{patents-generative2023,
-  title={Automated patent extraction powers generative modeling in focused chemical spaces},
-  author={Subramanian, Akshay and Greenman, Kevin P. and Gervaix, Alexis and Yang, Tzuhsiung and G{\'{o}}mez-Bombarelli, Rafael},
-  journal = {arXiv preprint arXiv:2303.08272},
-  doi = {10.48550/ARXIV.2303.08272},
-  year={2023}
+@article{subramanian_automated_2023,
+	title = {Automated patent extraction powers generative modeling in focused chemical spaces},
+	volume = {2},
+	issn = {2635-098X},
+	url = {https://pubs.rsc.org/en/content/articlelanding/2023/dd/d3dd00041a},
+	doi = {10.1039/D3DD00041A},
+	number = {4},
+	journal = {Digital Discovery},
+	author = {Subramanian, Akshay and Greenman, Kevin P. and Gervaix, Alexis and Yang, Tzuhsiung and Gómez-Bombarelli, Rafael},
+	year = {2023},
+	pages = {1006--1015},
 }
 ```
